@@ -92,7 +92,7 @@ export function NarrativeKPIs({ narrativeKpis, managers }: NarrativeKPIsProps) {
                 <div className="space-y-2 border-t border-border/60 pt-3">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <span className="text-sm font-medium text-foreground">
-                      {manager?.name || "Manager"}
+                      {manager ? (manager.display_name ?? manager.name) : "Manager"}
                     </span>
                     {kpi.stat_value ? (
                       <span className="text-xs font-semibold text-primary">

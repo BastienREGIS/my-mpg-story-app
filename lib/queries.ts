@@ -8,6 +8,8 @@ import type {
   Match,
   DashboardData,
   ManagerWithTeam,
+  Manager,
+  Team,
   StandingsHistoryWithManager,
   MatchResult,
   DashboardMatchDataStatus,
@@ -23,7 +25,6 @@ import {
   getPalmarèsCountsForTeam,
   normalizeTeamName,
   PALMARES,
-  resolveSeason10RosterTeamDivision,
 } from '@/lib/league-lore'
 import type { BonusHighlightBlock } from '@/lib/types'
 import {
@@ -180,29 +181,34 @@ export async function getSeasonByIdForLeague(
   return data as Season | null
 }
 
+/** Participants de la saison ; le rattachement historique du manager ne filtre jamais l'effectif. */
 export async function getManagers(leagueId: string, seasonId: string): Promise<ManagerWithTeam[]> {
   const supabase = await createClient()
 
-  const { data: managers, error: managersError } = await supabase
-    .from('managers')
-    .select('*')
-    .eq('league_id', leagueId)
-    .order('name')
+  const { data, error } = await supabase
+    .from('teams')
+    .select('*, manager:managers!inner(*), season:seasons!inner(league_id, league:leagues!inner(slug))')
+    .eq('season_id', seasonId)
+    .eq('season.league_id', leagueId)
 
-  if (managersError || !managers) {
-    console.error('Error fetching managers:', managersError)
+  if (error) {
+    console.error('Error fetching season participants:', error)
     return []
   }
 
-  const { data: teams } = await supabase
-    .from('teams')
-    .select('*')
-    .eq('season_id', seasonId)
+  type ParticipantRow = Team & {
+    manager: Manager
+    season: { league_id: string; league: { slug: string } }
+  }
 
-  return managers.map((manager) => ({
-    ...manager,
-    team: teams?.find((t) => t.manager_id === manager.id) || undefined,
-  })) as ManagerWithTeam[]
+  return ((data ?? []) as unknown as ParticipantRow[])
+    .map(({ manager, season, ...team }): ManagerWithTeam => ({
+      ...manager,
+      team,
+      seasonLeague: season.league.slug === 'jakattak_ligue1' ? 'L1'
+        : season.league.slug === 'jakattak_ligue2' ? 'L2' : null,
+    }))
+    .sort((a, b) => (a.display_name ?? a.name).localeCompare(b.display_name ?? b.name))
 }
 
 /**
@@ -360,11 +366,12 @@ export async function getManagersWithStats(
     }
   }
 
-  const cards = managers.map((m) => {
-    const coachName = m.name
-    const teamName = (m.identity_label ?? '').trim()
-    const loreTeamName =
-      teamName.length > 0 ? teamName : (m.team?.name ?? '').trim()
+  const cards = managers.flatMap((m): ManagerCard[] => {
+    const currentLeague = m.seasonLeague
+    if (!currentLeague) return []
+    const coachName = m.display_name ?? m.name
+    const teamName = (m.team?.name ?? '').trim()
+    const loreTeamName = (m.identity_label ?? '').trim() || teamName
     const row = lastByManager.get(m.id)
     const palmares = { ...getPalmarèsCountsForTeam(loreTeamName) }
 
@@ -375,13 +382,7 @@ export async function getManagersWithStats(
       if (recap.l2Promoted.some((r) => r.id === m.id)) palmares.promotions++
     }
 
-    const { league: currentLeague, matchedRoster } = resolveSeason10RosterTeamDivision(loreTeamName)
-    if (!matchedRoster) {
-      console.warn(
-        `[Managers] Aucune entrée roster Saison 10 pour l’équipe « ${loreTeamName} » — L1/L2 peut être incorrect.`
-      )
-    }
-    return {
+    return [{
       id: m.id,
       name: m.name,
       coachName,
@@ -399,7 +400,7 @@ export async function getManagersWithStats(
       loreTag: getLoreForCoach(loreTeamName),
       loreDescription: null,
       palmares,
-    }
+    }]
   })
 
   return finalizeManagerCardLoreDescriptions(sortManagerCardsForDisplay(cards))
@@ -410,7 +411,7 @@ const ALL_MANAGERS_LEAGUE_SLUGS = ['jakattak_ligue1', 'jakattak_ligue2'] as cons
 
 /**
  * Tous les managers L1 + L2 : stats par ligue (saison courante de chaque slug),
- * `currentLeague` issu de `resolveSeason10RosterTeamDivision` / `CURRENT_SEASON_10_ROSTERS` (`league-lore`).
+ * `currentLeague` issu de la ligue de la saison de chaque équipe.
  * Tri : L1 d’abord par rang, puis L2 par rang ; rangs absents en dernier dans chaque groupe.
  */
 export async function getAllManagersWithStats(): Promise<ManagerCard[]> {

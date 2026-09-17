@@ -34,6 +34,7 @@ export interface Manager {
   id: string
   league_id: string
   name: string
+  display_name: string | null
   avatar_url: string | null
   identity_label: string | null
   created_at: string | null
@@ -171,6 +172,8 @@ export interface TimelineEvent {
 
 // Extended types with relations
 export interface ManagerWithTeam extends Manager {
+  /** Division de participation, dérivée de teams → seasons → leagues. */
+  seasonLeague?: "L1" | "L2" | null
   team?: Team
 }
 

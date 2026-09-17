@@ -109,7 +109,7 @@ export function computeLeagueStoryKpis(
       hot = {
         slug: "hot_coach",
         title: "Coach en feu",
-        managerName: mgr.name,
+        managerName: mgr.display_name ?? mgr.name,
         teamLabel,
         detail: `+${bestDelta} place${bestDelta > 1 ? "s" : ""} après la J${lastMd}.`,
         hasData: true,
@@ -145,7 +145,7 @@ export function computeLeagueStoryKpis(
       crisis = {
         slug: "crisis_coach",
         title: "Coach en crise",
-        managerName: mgr.name,
+        managerName: mgr.display_name ?? mgr.name,
         teamLabel,
         detail: `−${worstDrop} place${worstDrop > 1 ? "s" : ""} après la J${lastMd}.${streakBit}`,
         hasData: true,
@@ -186,7 +186,7 @@ export function computeLeagueStoryKpis(
       comeback = {
         slug: "comeback",
         title: "Plus grosse remontée",
-        managerName: mgr.name,
+        managerName: mgr.display_name ?? mgr.name,
         teamLabel,
         detail: `Depuis la J${firstMd} : +${best} place${best > 1 ? "s" : ""}.`,
         hasData: true,
@@ -214,7 +214,7 @@ export function computeLeagueStoryKpis(
       wall = {
         slug: "defensive_wall",
         title: "Mur défensif",
-        managerName: bestD.name,
+        managerName: bestD.display_name ?? bestD.name,
         teamLabel: wallLabel,
         detail: `${dRow.goals_against ?? 0} but encaissé${(dRow.goals_against ?? 0) > 1 ? "s" : ""} après la J${lastMd}.`,
         hasData: true,
@@ -231,7 +231,7 @@ export function computeLeagueStoryKpis(
       attack = {
         slug: "nuclear_attack",
         title: "Attaque nucléaire",
-        managerName: bestA.name,
+        managerName: bestA.display_name ?? bestA.name,
         teamLabel: attackLabel,
         detail: `${aRow.goals_for ?? 0} but marqué${(aRow.goals_for ?? 0) > 1 ? "s" : ""} après la J${lastMd}.`,
         hasData: true,
@@ -264,7 +264,7 @@ export function computeLeagueStoryKpis(
         pressure = {
           slug: "leader_pressure",
           title: "Leader sous pression",
-          managerName: mgr.name,
+          managerName: mgr.display_name ?? mgr.name,
           teamLabel,
           detail: `Seulement +${gap} pt${gap > 1 ? "s" : ""} sur le 2e après la J${lastMd}.`,
           hasData: true,
@@ -389,7 +389,7 @@ export function computeLeaderStripKpi(
   return {
     slug: "leader_pressure",
     title: tight ? "Leader sous pression" : "La tête du classement",
-    managerName: mgr.name,
+    managerName: mgr.display_name ?? mgr.name,
     teamLabel,
     detail:
       gap != null && second
@@ -453,7 +453,7 @@ export function computeFormExtremeCoaches(
     best: {
       slug: "hot_coach",
       title: "Coach en feu",
-      managerName: bestMgr.name,
+      managerName: bestMgr.display_name ?? bestMgr.name,
       teamLabel: bestLabel,
       detail: formRecentDetailFromWdl(bestScored.form, bestScored.counts.w, lastMd),
       hasData: true,
@@ -462,7 +462,7 @@ export function computeFormExtremeCoaches(
     worst: {
       slug: "crisis_coach",
       title: "Coach en crise",
-      managerName: worstMgr.name,
+      managerName: worstMgr.display_name ?? worstMgr.name,
       teamLabel: worstLabel,
       detail: formRecentDetailFromWdl(worstScored.form, worstScored.counts.w, lastMd),
       hasData: true,
@@ -571,7 +571,7 @@ export function computeManagerOfWeekForMatchday(
   return {
     slug: "hot_coach",
     title: "Manager de la semaine",
-    managerName: mgr.name,
+    managerName: mgr.display_name ?? mgr.name,
     teamLabel,
     detail: `+${bestDelta} place${bestDelta > 1 ? "s" : ""} par rapport à la J${prevMd}.`,
     hasData: true,

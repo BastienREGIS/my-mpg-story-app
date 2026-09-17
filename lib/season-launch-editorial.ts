@@ -42,7 +42,7 @@ export const seasonLaunchEditorial: Record<string, SeasonLaunchEditorial> = {
         category: "À LA UNE",
         title: "Dans la tête du champion",
         text:
-          "Six titres, quelques ennemis et aucune envie de faire profil bas. L'entraîneur Seb ouvre les portes de son règne à La Gazzatak.",
+          "Six titres, quelques ennemis et aucune envie de faire profil bas. L'entraîneur Seb ouvre les portes de son règne à La Gazzattak.",
         href: "/ligue/jakattak_ligue1/articles/dans-la-tete-du-champion",
         cta: "LIRE L'INTERVIEW",
       },

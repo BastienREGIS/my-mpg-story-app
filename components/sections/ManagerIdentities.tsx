@@ -87,7 +87,7 @@ export function ManagerIdentities({ managers }: ManagerIdentitiesProps) {
                   <div className="relative">
                     <Avatar className="w-12 h-12">
                       {manager.avatar_url ? (
-                        <AvatarImage src={manager.avatar_url} alt={manager.name} />
+                        <AvatarImage src={manager.avatar_url} alt={manager.display_name ?? manager.name} />
                       ) : null}
                       <AvatarFallback
                         className="text-lg font-bold"
@@ -96,7 +96,7 @@ export function ManagerIdentities({ managers }: ManagerIdentitiesProps) {
                           color: "white"
                         }}
                       >
-                        {getInitials(manager.name)}
+                        {getInitials(manager.display_name ?? manager.name)}
                       </AvatarFallback>
                     </Avatar>
                     {currentRank > 0 && (
@@ -114,7 +114,7 @@ export function ManagerIdentities({ managers }: ManagerIdentitiesProps) {
                       {teamName}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-2">
-                      {manager.name}
+                      {manager.display_name ?? manager.name}
                     </p>
                     <div className="flex items-center gap-2">
                       {manager.identity_label && (

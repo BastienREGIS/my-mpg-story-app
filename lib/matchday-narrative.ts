@@ -1,5 +1,5 @@
 import { getBonusNarrative } from "@/lib/bonus-narrative"
-import { normalizeTeamName, resolveSeason10RosterTeamDivision } from "@/lib/league-lore"
+import { normalizeTeamName } from "@/lib/league-lore"
 import type { BonusHighlightBlock, BonusNarrativeEntry, ManagerWithTeam, StandingsHistoryWithManager } from "@/lib/types"
 
 export type { BonusHighlightBlock }
@@ -69,7 +69,7 @@ export function computeMatchdayBonusHighlight(
 
   for (const row of bonuses) {
     const mgr = managers.find((m) => m.id === row.manager_id)
-    const coachName = mgr?.name?.trim() || "Le coach"
+    const coachName = mgr ? (mgr.display_name ?? mgr.name) : "Le coach"
     const teamName = mgr?.team?.name?.trim() || "son équipe"
     const narrative = getBonusNarrative(row.bonus_type, row.bonus_outcome, coachName, teamName)
     if (!narrative) continue
@@ -106,14 +106,8 @@ export function computeMatchdayBonusHighlight(
 export type DangerZoneBlock = { title: string; text: string } | null
 export type PromotionZoneBlock = { title: string; text: string } | null
 
-function rosterDivisionForDanger(managers: ManagerWithTeam[]): "L1" | "L2" | null {
-  for (const m of managers) {
-    const label = (m.identity_label?.trim() || m.team?.name || m.name || "").trim()
-    if (!label) continue
-    const { league, matchedRoster } = resolveSeason10RosterTeamDivision(label)
-    if (matchedRoster) return league
-  }
-  return null
+function seasonDivisionForDanger(managers: ManagerWithTeam[]): "L1" | "L2" | null {
+  return managers.find((m) => m.seasonLeague)?.seasonLeague ?? null
 }
 
 function dangerZoneLore(mgr: ManagerWithTeam): string | null {
@@ -137,7 +131,7 @@ export function computeDangerZone(params: {
 }): DangerZoneBlock {
   const { standingsRows, managers, remainingMatchdays, isEndOfSeason } = params
 
-  const division = rosterDivisionForDanger(managers)
+  const division = seasonDivisionForDanger(managers)
   if (division !== "L1") return null
 
   const sorted = [...standingsRows].sort((a, b) => a.rank - b.rank)
@@ -274,7 +268,7 @@ export function computePromotionZone(params: {
 }): PromotionZoneBlock {
   const { standingsRows, managers, remainingMatchdays, isEndOfSeason } = params
 
-  const division = rosterDivisionForDanger(managers)
+  const division = seasonDivisionForDanger(managers)
   if (division !== "L2") return null
 
   const sorted = [...standingsRows].sort((a, b) => a.rank - b.rank)

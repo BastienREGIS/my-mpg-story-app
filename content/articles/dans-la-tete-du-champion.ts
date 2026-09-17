@@ -12,14 +12,14 @@ export const dansLaTeteDuChampion: EditorialArticle = {
   kicker: "LE GALACTIQUE · 6 TITRES EN LIGUE 1",
   title: "« Perdez pas votre temps... À la fin, c'est un Rolando qui gagne. »",
   excerpt:
-    "Six titres, quelques ennemis et aucune envie de faire profil bas. L'entraîneur Seb ouvre les portes de son règne à La Gazzatak.",
+    "Six titres, quelques ennemis et aucune envie de faire profil bas. L'entraîneur Seb ouvre les portes de son règne à La Gazzattak.",
   publishedAt: "2026-08-31",
-  author: "La Gazzatak / La rédaction",
+  author: "La Gazzattak / La rédaction",
   heroImage: "/Seb.png",
   content: [
     p(
       t(
-        "Alors que la nouvelle saison peine encore à remplir ses rangs, La Gazzatak est allée prendre des nouvelles de celui qui, lui, ne semble pas souffrir d'un manque de confiance."
+        "Alors que la nouvelle saison peine encore à remplir ses rangs, La Gazzattak est allée prendre des nouvelles de celui qui, lui, ne semble pas souffrir d'un manque de confiance."
       )
     ),
     p(
@@ -92,7 +92,7 @@ export const dansLaTeteDuChampion: EditorialArticle = {
     ),
     { type: "heading", text: "CELTIC GOSSBO ? RENDEZ-VOUS DEVANT LA COMMISSION" },
     p(
-      t("Quand La Gazzatak lui demande de désigner le coach le plus surcoté, "),
+      t("Quand La Gazzattak lui demande de désigner le coach le plus surcoté, "),
       t("l'entraîneur Seb", true),
       t(" n'hésite guère : "),
       t("l'entraîneur Benoît du Celtic Gossbo", true),
@@ -109,7 +109,7 @@ export const dansLaTeteDuChampion: EditorialArticle = {
         "Ce n'est pas du niveau d'un entraîneur de lancer ce genre d'accusations. Je réfléchis avec mes avocats à porter l'affaire devant la commission de la Ligue. En plus, il m'a mis 5-0 ce bâtard !",
     },
     p(t("Avant d'ajouter que le départ de l'entraîneur est peut-être la preuve qu'il aurait lui-même "), t("« des choses à se reprocher »", true), t(".")),
-    p(t("La Gazzatak laisse ses lecteurs déterminer lequel de ces deux éléments motive réellement la procédure.")),
+    p(t("La Gazzattak laisse ses lecteurs déterminer lequel de ces deux éléments motive réellement la procédure.")),
     p(
       t(
         "Une chose est certaine : l'entraîneur Benoît ne sera plus là cette saison pour défendre sa cause sur le terrain. Pendant que certains quittent la Ligue 1, deux nouveaux entraîneurs frappent justement à la porte de l'élite."
@@ -138,7 +138,7 @@ export const dansLaTeteDuChampion: EditorialArticle = {
         "80 % de scouting, les recherches, le talent... et disons que j'ai mes relations. En quelques coups de fil, j'ai mes infos.",
     },
     p(t("Des recherches. Du talent. Des relations. Des coups de fil.")),
-    p(t("Une recette sur laquelle La Gazzatak aura probablement l'occasion de revenir...", true)),
+    p(t("Une recette sur laquelle La Gazzattak aura probablement l'occasion de revenir...", true)),
     p(
       t(
         "En attendant, une dernière question restait à poser au sextuple champion. Après six couronnes et alors qu'une nouvelle meute s'apprête à partir à sa chasse, "

@@ -14,12 +14,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!article) {
     return {
-      title: "Article introuvable | La Gazzatak",
+      title: "Article introuvable | La Gazzattak",
     }
   }
 
   return {
-    title: "Dans la tête du champion | La Gazzatak",
+    title: "Dans la tête du champion | La Gazzattak",
     description: article.excerpt,
   }
 }

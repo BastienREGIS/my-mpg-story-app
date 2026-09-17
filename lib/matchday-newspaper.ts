@@ -1,5 +1,5 @@
 import type { LeagueStoryKpi } from "@/lib/league-story-kpis"
-import { getLoreForCoach, normalizeTeamName, resolveSeason10RosterTeamDivision } from "@/lib/league-lore"
+import { getLoreForCoach, normalizeTeamName } from "@/lib/league-lore"
 import type { MatchBonusRecord } from "@/lib/matchday-narrative"
 import type { Manager, ManagerWithTeam, MatchResult, Season, StandingsHistoryWithManager, ValidatedMatchRow } from "@/lib/types"
 
@@ -152,14 +152,8 @@ function teamWonMatch(teamId: string, m: Pick<ValidatedMatchRow, "home_team_id" 
   return false
 }
 
-function rosterLeagueForContext(managers: ManagerWithTeam[]): "L1" | "L2" | null {
-  for (const m of managers) {
-    const label = identityForRolando(m)
-    if (!label) continue
-    const { league, matchedRoster } = resolveSeason10RosterTeamDivision(label)
-    if (matchedRoster) return league
-  }
-  return null
+function seasonLeagueForContext(managers: ManagerWithTeam[]): "L1" | "L2" | null {
+  return managers.find((m) => m.seasonLeague)?.seasonLeague ?? null
 }
 
 export function getL2Standings(
@@ -170,9 +164,7 @@ export function getL2Standings(
     .filter((r) => {
       const mgr = managers.find((m) => m.id === r.manager_id)
       if (!mgr) return false
-      const label = identityForRolando(mgr)
-      const { league, matchedRoster } = resolveSeason10RosterTeamDivision(label)
-      return matchedRoster && league === "L2"
+      return mgr.seasonLeague === "L2"
     })
     .sort((a, b) => a.rank - b.rank)
     .map((r) => managers.find((m) => m.id === r.manager_id))
@@ -215,7 +207,7 @@ export function buildDynamicHeadline(params: BuildDynamicHeadlineParams): Dynami
   const dayMatches = validatedMatchRows.filter((r) => r.matchday_number === matchdayNumber)
   const nTeams = rowsMd.length
   const eos = isEndOfSeason(season)
-  const division = rosterLeagueForContext(managers)
+  const division = seasonLeagueForContext(managers)
   const seasonN = seasonNumberFromName(seasonName)
 
   const leaderRow = rowsMd.find((r) => r.rank === 1)
@@ -658,7 +650,7 @@ export function buildDynamicHeadline(params: BuildDynamicHeadlineParams): Dynami
   })
   if (decisiveBonus) {
     const coachM = managers.find((m) => m.id === decisiveBonus.manager_id)
-    const coach = coachM?.name?.trim() || "Le coach"
+    const coach = coachM ? (coachM.display_name ?? coachM.name) : "Le coach"
     return {
       headline: `Le coup tactique de la journée. ${coach} avait le bon plan.`,
       intro: capSentences(

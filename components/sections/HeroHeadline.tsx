@@ -29,14 +29,14 @@ export function HeroHeadline({
 
   const latestStandings = standingsHistory.filter((s) => s.matchday_number === latestMatchday)
   const leaderStanding = latestStandings.find((s) => s.rank === 1)
-  const leader = leaderStanding?.manager?.name || "À déterminer"
+  const leader = leaderStanding?.manager ? (leaderStanding.manager.display_name ?? leaderStanding.manager.name) : "À déterminer"
   const leaderForm = leaderStanding?.form?.trim() || null
 
   const lastPlaceStanding = latestStandings.reduce(
     (prev, current) => (current.rank > (prev?.rank || 0) ? current : prev),
     latestStandings[0]
   )
-  const underPressure = lastPlaceStanding?.manager?.name || "À déterminer"
+  const underPressure = lastPlaceStanding?.manager ? (lastPlaceStanding.manager.display_name ?? lastPlaceStanding.manager.name) : "À déterminer"
 
   const matchdayNumber = currentMatchday?.number || latestMatchday || 1
   const totalMatchdays = season.total_matchdays ?? null

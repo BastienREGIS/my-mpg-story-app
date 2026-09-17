@@ -170,7 +170,7 @@ export function SeasonLaunchHomepage({ data }: Props) {
                 <h3 className="truncate text-sm font-black text-foreground">
                   {manager.team?.name}
                 </h3>
-                <p className="truncate text-xs text-muted-foreground">{manager.name}</p>
+                <p className="truncate text-xs text-muted-foreground">{manager.display_name ?? manager.name}</p>
               </article>
             ))}
           </div>
