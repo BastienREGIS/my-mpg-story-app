@@ -5,6 +5,7 @@ import type { SupabaseClient } from "@supabase/supabase-js"
 import { z } from "zod"
 import { getCurrentSeason, getLeagueBySlug } from "@/lib/queries"
 import { createServiceRoleClient } from "@/lib/supabase/admin"
+import { hasAdminAccess } from "@/lib/admin-access"
 
 export type MatchEntryActionState = {
   ok: boolean
@@ -226,6 +227,9 @@ export async function submitBulkMatchResults(
   _prev: MatchEntryActionState,
   formData: FormData
 ): Promise<MatchEntryActionState> {
+  if (!(await hasAdminAccess())) {
+    return { ok: false, message: "Accès expiré ou non autorisé. Rechargez la page et saisissez le code d'accès." }
+  }
   const supabase = createServiceRoleClient()
   if (!supabase) {
     return {
@@ -441,6 +445,7 @@ export async function getExistingMatchScoresAction(
   homeTeamId: string,
   awayTeamId: string
 ): Promise<{ homeScore: number; awayScore: number } | null> {
+  if (!(await hasAdminAccess())) return null
   const supabase = createServiceRoleClient()
   if (!supabase) return null
 
@@ -470,6 +475,9 @@ export async function getExistingMatchScoresAction(
 export async function closeSeasonAction(
   leagueSlug: string
 ): Promise<{ success: boolean; error?: string }> {
+  if (!(await hasAdminAccess())) {
+    return { success: false, error: "Accès expiré ou non autorisé. Rechargez la page et saisissez le code d'accès." }
+  }
   const supabase = createServiceRoleClient()
   if (!supabase) {
     return { success: false, error: "SUPABASE_SERVICE_ROLE_KEY manquant." }
@@ -496,6 +504,9 @@ export async function closeSeasonAction(
 export async function reopenSeasonAction(
   leagueSlug: string
 ): Promise<{ success: boolean; error?: string }> {
+  if (!(await hasAdminAccess())) {
+    return { success: false, error: "Accès expiré ou non autorisé. Rechargez la page et saisissez le code d'accès." }
+  }
   const supabase = createServiceRoleClient()
   if (!supabase) {
     return { success: false, error: "SUPABASE_SERVICE_ROLE_KEY manquant." }

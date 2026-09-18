@@ -1,45 +1,47 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { checkAdminAccess, unlockAdmin } from "@/app/admin/match-results/access-actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-
-const SESSION_KEY = "admin_unlocked"
 
 export function AccessGate({ children }: { children: React.ReactNode }) {
   const [isUnlocked, setIsUnlocked] = useState(false)
   const [secretInput, setSecretInput] = useState("")
   const [error, setError] = useState("")
   const [mounted, setMounted] = useState(false)
+  const [pending, setPending] = useState(false)
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(SESSION_KEY) === "true") {
-        setIsUnlocked(true)
-      }
-    } catch {
-      /* mode privé ou SSR */
-    }
-    setMounted(true)
+    let active = true
+    checkAdminAccess()
+      .then((allowed) => { if (active) setIsUnlocked(allowed) })
+      .catch(() => { if (active) setIsUnlocked(false) })
+      .finally(() => { if (active) setMounted(true) })
+    return () => { active = false }
   }, [])
 
   if (!mounted) return null
   if (isUnlocked) return <>{children}</>
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const expected = process.env.NEXT_PUBLIC_ADMIN_SECRET
-    if (secretInput === expected) {
-      try {
-        sessionStorage.setItem(SESSION_KEY, "true")
-      } catch {
-        /* ignore */
+    if (pending) return
+    setPending(true)
+    setError("")
+    try {
+      if (await unlockAdmin(secretInput)) {
+        setSecretInput("")
+        setIsUnlocked(true)
+      } else {
+        setError("Code incorrect ou accès non configuré.")
       }
-      setIsUnlocked(true)
-    } else {
-      setError("Code incorrect. Réessayez.")
+    } catch {
+      setError("Connexion impossible. Réessayez.")
+    } finally {
+      setPending(false)
     }
   }
 
@@ -67,8 +69,8 @@ export function AccessGate({ children }: { children: React.ReactNode }) {
               />
             </div>
             {error ? <p className="text-sm text-destructive">{error}</p> : null}
-            <Button type="submit" className="w-full">
-              Accéder
+            <Button type="submit" className="w-full" disabled={pending || !secretInput}>
+              {pending ? "Vérification…" : "Accéder"}
             </Button>
           </form>
         </CardContent>
