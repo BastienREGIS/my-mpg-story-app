@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: "Dans la tête du champion | La Gazzattak",
+    title: `${article.slug === "dans-la-tete-du-champion" ? "Dans la tête du champion" : article.title} | La Gazzattak`,
     description: article.excerpt,
   }
 }

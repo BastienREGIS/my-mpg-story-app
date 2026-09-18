@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronsUp, Swords } from "lucide-react"
+import { Swords } from "lucide-react"
 import Link from "next/link"
 import type { ReactNode } from "react"
 import type { DashboardData, ManagerWithTeam, MatchResult } from "@/lib/types"
@@ -24,8 +24,20 @@ function currentParticipants(managers: ManagerWithTeam[]) {
   return managers.filter((m) => m.team?.id && m.team.name.trim() !== "")
 }
 
-function formatTeamList(teams: string[]) {
-  return teams.join(" & ")
+function ArticleCTA({ href, label, compact = false }: { href?: string | null; label?: string; compact?: boolean }) {
+  if (!href || !label) return null
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "inline-flex max-w-full items-center border border-primary font-mono font-black uppercase tracking-[0.18em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground",
+        compact ? "mt-3 px-3 py-1.5 text-[0.7rem]" : "mt-5 px-4 py-2 text-xs"
+      )}
+    >
+      {label}
+    </Link>
+  )
 }
 
 function SectionHeading({ id, children }: { id: string; children: ReactNode }) {
@@ -54,7 +66,7 @@ export function SeasonLaunchHomepage({ data }: Props) {
   const editorial = getSeasonLaunchEditorial(league.slug)
   const fixtures = scheduledJ1Fixtures(matchResults)
   const participants = currentParticipants(managers)
-  const [leadStory, ...secondaryStories] = editorial.stories
+  const { j1Launch, mercatoArticle, championInterview, stories: secondaryStories } = editorial
 
   return (
     <div className="space-y-9 pb-8 sm:space-y-12">
@@ -65,16 +77,17 @@ export function SeasonLaunchHomepage({ data }: Props) {
         <div className="absolute inset-x-0 top-0 h-1 bg-primary" aria-hidden />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5 bg-[linear-gradient(135deg,transparent,rgba(61,220,132,0.1))]" />
         <div className="relative grid gap-7 lg:grid-cols-[minmax(0,1.65fr)_minmax(240px,0.7fr)] lg:items-end">
-          <div className="max-w-4xl">
+          <div className="min-w-0 max-w-4xl">
             <p className="font-mono text-[0.65rem] font-black uppercase tracking-[0.24em] text-primary sm:text-xs">
-              {editorial.eyebrow}
+              {j1Launch.category}
             </p>
-            <h1 className="mt-4 max-w-5xl text-balance font-display text-5xl font-black uppercase leading-[0.92] tracking-normal text-white sm:text-7xl lg:text-8xl">
-              {editorial.headline}
+            <h1 className="mt-4 max-w-5xl break-words text-balance font-display text-4xl font-black uppercase leading-[0.92] tracking-normal text-white sm:text-7xl lg:text-8xl">
+              {j1Launch.title}
             </h1>
             <p className="mt-5 max-w-2xl text-pretty text-base font-medium leading-relaxed text-zinc-300 sm:text-lg">
-              {editorial.dek}
+              {j1Launch.excerpt}
             </p>
+            <ArticleCTA href={j1Launch.href} label={j1Launch.ctaLabel} />
             <div className="mt-6 flex flex-wrap gap-x-3 gap-y-2 font-mono text-[0.65rem] font-bold uppercase tracking-widest text-zinc-400">
               <span>{league.name}</span>
               <span className="text-primary" aria-hidden>•</span>
@@ -97,25 +110,16 @@ export function SeasonLaunchHomepage({ data }: Props) {
       <section className="space-y-5" aria-labelledby="stories-heading">
         <SectionHeading id="stories-heading">À LA UNE</SectionHeading>
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(260px,0.75fr)]">
-          {leadStory ? (
-            <article className="border-l-4 border-primary py-1 pl-4 sm:pl-6">
-              <Eyebrow>{leadStory.category}</Eyebrow>
-              <h3 className="mt-3 max-w-3xl text-balance font-display text-4xl font-black leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
-                {leadStory.title}
-              </h3>
-              <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {leadStory.text}
-              </p>
-              {leadStory.href && leadStory.cta ? (
-                <Link
-                  href={leadStory.href}
-                  className="mt-5 inline-flex items-center border border-primary px-4 py-2 font-mono text-xs font-black uppercase tracking-[0.18em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-                >
-                  {leadStory.cta}
-                </Link>
-              ) : null}
-            </article>
-          ) : null}
+          <article className="min-w-0 border-l-4 border-primary py-1 pl-4 sm:pl-6">
+            <Eyebrow>{mercatoArticle.category}</Eyebrow>
+            <h3 className="mt-3 max-w-3xl text-balance font-display text-4xl font-black leading-[1.02] text-foreground sm:text-5xl lg:text-6xl">
+              {mercatoArticle.title}
+            </h3>
+            <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
+              {mercatoArticle.excerpt}
+            </p>
+            <ArticleCTA href={mercatoArticle.href} label={mercatoArticle.ctaLabel} />
+          </article>
 
           {secondaryStories.length > 0 ? (
             <div className="divide-y divide-border/70">
@@ -126,14 +130,7 @@ export function SeasonLaunchHomepage({ data }: Props) {
                     {story.title}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{story.text}</p>
-                  {story.href && story.cta ? (
-                    <Link
-                      href={story.href}
-                      className="mt-3 inline-flex items-center border border-primary px-3 py-1.5 font-mono text-[0.7rem] font-black uppercase tracking-[0.18em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-                    >
-                      {story.cta}
-                    </Link>
-                  ) : null}
+                  <ArticleCTA href={story.href} label={story.cta} compact />
                 </article>
               ))}
             </div>
@@ -141,25 +138,20 @@ export function SeasonLaunchHomepage({ data }: Props) {
         </div>
       </section>
 
-      <section className="space-y-5" aria-labelledby="movements-heading">
-        <SectionHeading id="movements-heading">L'ASCENSEUR</SectionHeading>
-        <div className="space-y-4">
-          {editorial.movements.map((movement) => (
-            <article key={movement.label} className="border-l border-primary/50 pl-4 sm:pl-5">
-              <div className="flex items-center gap-2">
-                <ChevronsUp className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-                <Eyebrow className="text-zinc-400">{movement.label}</Eyebrow>
-              </div>
-              <p className="mt-3 text-balance font-display text-3xl font-black leading-none text-foreground sm:text-4xl">
-                {formatTeamList(movement.teams)}
-              </p>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {movement.text}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
+      {championInterview ? (
+        <section aria-labelledby="champion-interview-heading">
+          <article className="border-l-4 border-primary py-1 pl-4 sm:pl-6">
+            <Eyebrow>{championInterview.category}</Eyebrow>
+            <h2 id="champion-interview-heading" className="mt-3 max-w-3xl text-balance font-display text-3xl font-black leading-[1.02] text-foreground sm:text-4xl">
+              {championInterview.title}
+            </h2>
+            <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
+              {championInterview.text}
+            </p>
+            <ArticleCTA href={championInterview.href} label={championInterview.cta} />
+          </article>
+        </section>
+      ) : null}
 
       {participants.length > 0 ? (
         <section className="space-y-4" aria-labelledby="participants-heading">

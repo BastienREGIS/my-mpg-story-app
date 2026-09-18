@@ -1,8 +1,13 @@
 import { dansLaTeteDuChampion } from "@/content/articles/dans-la-tete-du-champion"
+import { mercatoLigue2 } from "@/content/articles/mercato-ligue-2"
+import { mercatoLigue1 } from "@/content/articles/mercato-ligue-1"
+import { j1Ligue1 } from "@/content/articles/j1-ligue-1"
+import { j1Ligue2 } from "@/content/articles/j1-ligue-2"
 
 export type EditorialTextSegment = {
   text: string
   strong?: boolean
+  emphasis?: boolean
 }
 
 export type EditorialArticleBlock =
@@ -25,16 +30,17 @@ export type EditorialArticle = {
   leagueSlug: string
   category: string
   eyebrow: string
-  kicker: string
+  kicker?: string
   title: string
   excerpt: string
-  publishedAt: string
-  author: string
+  excerptSegments?: EditorialTextSegment[]
+  publishedAt?: string
+  author?: string
   heroImage?: string
   content: EditorialArticleBlock[]
 }
 
-const articles = [dansLaTeteDuChampion] satisfies EditorialArticle[]
+const articles = [dansLaTeteDuChampion, mercatoLigue2, mercatoLigue1, j1Ligue1, j1Ligue2] satisfies EditorialArticle[]
 
 export function getArticle(leagueSlug: string, articleSlug: string): EditorialArticle | null {
   return articles.find((article) => article.leagueSlug === leagueSlug && article.slug === articleSlug) ?? null

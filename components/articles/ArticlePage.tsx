@@ -30,6 +30,8 @@ function TextSegments({ segments }: { segments: EditorialTextSegment[] }) {
           <strong key={`${segment.text}-${index}`} className="font-extrabold text-zinc-100">
             {segment.text}
           </strong>
+        ) : segment.emphasis ? (
+          <em key={`${segment.text}-${index}`}>{segment.text}</em>
         ) : (
           <span key={`${segment.text}-${index}`}>{segment.text}</span>
         )
@@ -118,22 +120,28 @@ export function ArticlePage({ article, league, season, allLeagues }: ArticlePage
               <p className="font-mono text-[0.68rem] font-black uppercase tracking-[0.22em] text-primary sm:text-xs">
                 {article.eyebrow}
               </p>
-              <p className="mt-5 font-mono text-[0.68rem] font-black uppercase tracking-[0.18em] text-zinc-400 sm:text-xs">
-                {article.kicker}
-              </p>
+              {article.kicker ? (
+                <p className="mt-5 font-mono text-[0.68rem] font-black uppercase tracking-[0.18em] text-zinc-400 sm:text-xs">
+                  {article.kicker}
+                </p>
+              ) : null}
               <h1 className="mt-5 max-w-4xl text-balance font-display text-[clamp(2.35rem,11vw,5.9rem)] font-black uppercase leading-[0.93] tracking-normal text-white">
                 {article.title}
               </h1>
               <p className="mt-6 max-w-2xl text-pretty text-lg font-medium leading-relaxed text-zinc-300 sm:text-xl">
-                {article.excerpt}
+                {article.excerptSegments ? <TextSegments segments={article.excerptSegments} /> : article.excerpt}
               </p>
-              <div className="mt-6 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[0.7rem] font-bold uppercase tracking-[0.16em] text-zinc-500">
-                <span>Par {article.author}</span>
-                <span className="text-primary" aria-hidden>
-                  ·
-                </span>
-                <time dateTime={article.publishedAt}>{formatPublishedDate(article.publishedAt)}</time>
-              </div>
+              {article.author || article.publishedAt ? (
+                <div className="mt-6 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[0.7rem] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                  {article.author ? <span>Par {article.author}</span> : null}
+                  {article.author && article.publishedAt ? (
+                    <span className="text-primary" aria-hidden>·</span>
+                  ) : null}
+                  {article.publishedAt ? (
+                    <time dateTime={article.publishedAt}>{formatPublishedDate(article.publishedAt)}</time>
+                  ) : null}
+                </div>
+              ) : null}
             </header>
 
             {article.heroImage ? (
@@ -162,7 +170,7 @@ export function ArticlePage({ article, league, season, allLeagues }: ArticlePage
                 className="inline-flex items-center gap-2 font-mono text-xs font-black uppercase tracking-[0.18em] text-primary transition-colors hover:text-primary/80"
               >
                 <ArrowLeft className="h-4 w-4" aria-hidden />
-                Retour à la Ligue 1
+                Retour à {league.name}
               </Link>
             </footer>
           </article>

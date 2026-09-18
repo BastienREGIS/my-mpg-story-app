@@ -14,10 +14,18 @@ export type SeasonLaunchMovement = {
   text: string
 }
 
+export type SeasonLaunchArticle = {
+  category: string
+  title: string
+  excerpt: string
+  href: string | null
+  ctaLabel: string
+}
+
 export type SeasonLaunchEditorial = {
-  eyebrow: string
-  headline: string
-  dek: string
+  j1Launch: SeasonLaunchArticle
+  mercatoArticle: SeasonLaunchArticle
+  championInterview?: SeasonLaunchStory
   heroAside: {
     eyebrow: string
     title: string
@@ -29,23 +37,34 @@ export type SeasonLaunchEditorial = {
 
 export const seasonLaunchEditorial: Record<string, SeasonLaunchEditorial> = {
   jakattak_ligue1: {
-    eyebrow: "SAISON 2026-2027 · PART 1",
-    headline: "LA CHASSE EST OUVERTE.",
-    dek: "Les compteurs sont remis à zéro. Les certitudes aussi.",
+    j1Launch: {
+      category: "JOURNÉE 1 · AVANT-MATCH",
+      title: "LE CHAMPION REMET SON TITRE EN JEU",
+      excerpt: "Golden Roosters entame la défense de son titre face à un Mat FC revanchard, tandis que les entraîneurs Mous et Filou découvrent la Ligue 1 avec leurs clubs respectifs.",
+      href: "/ligue/jakattak_ligue1/articles/j1-ligue-1-avant-match",
+      ctaLabel: "Lire l’avant-match de la J1",
+    },
+    mercatoArticle: {
+      category: "MERCATO",
+      title: "JPP A TOUT TENTÉ. LES AUTRES ONT TOUT SIGNÉ.",
+      excerpt: "Jakattak, Mat FC et Golden Roosters ont sorti les millions, FC Goudal a multiplié les signatures, tandis que JPP a vu les dossiers lui échapper les uns après les autres. Le promu a surtout collectionné les refus.",
+      href: "/ligue/jakattak_ligue1/articles/mercato-ligue-1-les-millions-ont-vole",
+      ctaLabel: "LIRE L’ARTICLE",
+    },
     heroAside: {
       eyebrow: "CHAMPION À BATTRE",
       title: "GOLDEN ROOSTERS",
       text: "La couronne est remise en jeu.",
     },
+    championInterview: {
+      category: "À LA UNE",
+      title: "Dans la tête du champion",
+      text:
+        "Six titres, quelques ennemis et aucune envie de faire profil bas. L'entraîneur Seb ouvre les portes de son règne à La Gazzattak.",
+      href: "/ligue/jakattak_ligue1/articles/dans-la-tete-du-champion",
+      cta: "LIRE L'INTERVIEW",
+    },
     stories: [
-      {
-        category: "À LA UNE",
-        title: "Dans la tête du champion",
-        text:
-          "Six titres, quelques ennemis et aucune envie de faire profil bas. L'entraîneur Seb ouvre les portes de son règne à La Gazzattak.",
-        href: "/ligue/jakattak_ligue1/articles/dans-la-tete-du-champion",
-        cta: "LIRE L'INTERVIEW",
-      },
       {
         category: "RIVALITÉ",
         title: "Affaire de famille",
@@ -62,21 +81,26 @@ export const seasonLaunchEditorial: Record<string, SeasonLaunchEditorial> = {
     ],
   },
   jakattak_ligue2: {
-    eyebrow: "SAISON 2026-2027 · PART 1",
-    headline: "TOUT LE MONDE VEUT MONTER.",
-    dek: "JPP et Filou FC ont quitté les lieux. Une nouvelle course à l'élite commence.",
+    j1Launch: {
+      category: "JOURNÉE 1 · AVANT-MATCH",
+      title: "LA COURSE À LA MONTÉE EST OUVERTE",
+      excerpt: "Relégué de Ligue 1, Olympik de Mars entame son opération remontée, tandis que l’entraîneur Bab repart pour une nouvelle saison avec le même objectif : ramener son club parmi l’élite.",
+      href: "/ligue/jakattak_ligue2/articles/j1-ligue-2-avant-match",
+      ctaLabel: "Lire l’avant-match de la J1",
+    },
+    mercatoArticle: {
+      category: "MERCATO",
+      title: "LA LIGUE 2 A DÉJÀ PERDU LA TÊTE.",
+      excerpt: "Rocket Team claque 100 M€ sur Lepaul, Bab Olympique répond à coups de millions, Deepblue gagne les batailles les plus chaudes et Sedy Team termine… seul au 11e tour. Le mercato a déjà laissé des traces.",
+      href: "/ligue/jakattak_ligue2/articles/mercato-ligue-2-100-millions-sur-lepaul",
+      ctaLabel: "LIRE L’ARTICLE",
+    },
     heroAside: {
       eyebrow: "OBJECTIF",
       title: "LIGUE 1",
       text: "Deux places. Beaucoup trop de candidats.",
     },
     stories: [
-      {
-        category: "RIVALITÉ",
-        title: "La revanche des recalés",
-        text:
-          "La Ligue 2 ouvre une nouvelle chasse : moins de lumière, autant d'ego, et la même obsession de remonter à l'étage supérieur.",
-      },
       {
         category: "À SUIVRE",
         title: "Bab peut-il encore retrouver l'élite ?",
