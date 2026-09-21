@@ -283,11 +283,12 @@ export function MatchdayResultsDialogTrigger({
       <div className={cn("flex justify-center", className)}>
         <Button
           type="button"
-          variant="outline"
+          variant={surface === "hero" ? "default" : "outline"}
           size="sm"
           className={cn(
             "w-full sm:w-auto",
-            onDarkSurround &&
+            surface === "hero" && "text-black hover:text-black",
+            onDarkSurround && surface !== "hero" &&
               "border-white/25 bg-zinc-900/50 text-zinc-100 hover:border-white/35 hover:bg-zinc-800/70 hover:text-white"
           )}
           onClick={() => setOpen(true)}
