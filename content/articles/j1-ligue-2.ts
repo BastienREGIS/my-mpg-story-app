@@ -1,6 +1,7 @@
 import type { EditorialArticle } from "@/lib/articles"
 
 export const j1Ligue2: EditorialArticle = {
+  "publishedAt": "2026-09-18",
   "slug": "j1-ligue-2-avant-match",
   "leagueSlug": "jakattak_ligue2",
   "category": "JOURNÉE 1 · AVANT-MATCH",

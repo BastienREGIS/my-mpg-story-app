@@ -28,6 +28,7 @@ export type EditorialArticleBlock =
 export type EditorialArticle = {
   slug: string
   leagueSlug: string
+  leagues?: string[]
   category: string
   eyebrow: string
   kicker?: string
@@ -40,12 +41,18 @@ export type EditorialArticle = {
   content: EditorialArticleBlock[]
 }
 
-const articles = [dansLaTeteDuChampion, mercatoLigue2, mercatoLigue1, j1Ligue1, j1Ligue2] satisfies EditorialArticle[]
+// À date égale, cet ordre départage les publications, de la plus récente à la plus ancienne.
+const articles = [j1Ligue1, j1Ligue2, mercatoLigue1, mercatoLigue2, dansLaTeteDuChampion] satisfies EditorialArticle[]
 
 export function getArticle(leagueSlug: string, articleSlug: string): EditorialArticle | null {
-  return articles.find((article) => article.leagueSlug === leagueSlug && article.slug === articleSlug) ?? null
+  return articles.find((article) => isArticleForLeague(article, leagueSlug) && article.slug === articleSlug) ?? null
+}
+
+export function isArticleForLeague(article: EditorialArticle, leagueSlug: string): boolean {
+  return (article.leagues ?? [article.leagueSlug]).includes(leagueSlug)
 }
 
 export function getArticlesForLeague(leagueSlug: string): EditorialArticle[] {
-  return articles.filter((article) => article.leagueSlug === leagueSlug)
+  return articles.filter((article) => isArticleForLeague(article, leagueSlug))
+    .sort((a, b) => (b.publishedAt ?? "").localeCompare(a.publishedAt ?? ""))
 }

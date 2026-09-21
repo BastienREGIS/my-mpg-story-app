@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, type ReactNode } from "react"
 import { Sidebar } from "@/components/layout/Sidebar"
 import { Header } from "@/components/layout/Header"
 import { SeasonBattle } from "@/components/sections/SeasonBattle"
@@ -33,9 +33,10 @@ import { matchHasCompleteScore as hasPlayedScore } from "@/lib/season-launch-edi
 
 interface DashboardClientProps {
   data: DashboardData
+  previousArticles?: ReactNode
 }
 
-export function DashboardClient({ data }: DashboardClientProps) {
+export function DashboardClient({ data, previousArticles }: DashboardClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const {
@@ -359,6 +360,7 @@ export function DashboardClient({ data }: DashboardClientProps) {
               </>
             )}
 
+            {previousArticles}
             <div className="h-6 sm:h-8" />
           </div>
         </main>

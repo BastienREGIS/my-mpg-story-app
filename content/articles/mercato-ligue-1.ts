@@ -1,6 +1,7 @@
 import type { EditorialArticle } from "@/lib/articles"
 
 export const mercatoLigue1: EditorialArticle = {
+  "publishedAt": "2026-09-18",
   "slug": "mercato-ligue-1-les-millions-ont-vole",
   "leagueSlug": "jakattak_ligue1",
   "category": "MERCATO LIGUE 1",
@@ -451,4 +452,3 @@ export const mercatoLigue1: EditorialArticle = {
     }
   ]
 }
-

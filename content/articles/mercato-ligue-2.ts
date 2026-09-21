@@ -1,6 +1,7 @@
 import type { EditorialArticle } from "@/lib/articles"
 
 export const mercatoLigue2: EditorialArticle = {
+  "publishedAt": "2026-09-18",
   "slug": "mercato-ligue-2-100-millions-sur-lepaul",
   "leagueSlug": "jakattak_ligue2",
   "category": "MERCATO LIGUE 2",
