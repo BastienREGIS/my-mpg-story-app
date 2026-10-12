@@ -76,7 +76,7 @@ export function getBonusNarrative(
         "Le miroir pour rien.\nL'adversaire n'avait rien mis et lui a quand même perdu son bonus.\nStratège du dimanche."
     } else if (o === "mirror_genius") {
       raw =
-        "Po po po. Il retourne la valise de son adversaire comme un grand.\nCoup de maître, 3 points volés à son adversaire.\nQuel génie !"
+        "Po po po. Il retourne le \"bonus\" de son adversaire comme un grand.\nCoup de maître, 3 points volés à son adversaire.\nQuel génie !"
     } else if (o === "mirror_draw") {
       raw =
         "Le miroir sauve un point in extremis.\nUn grand ouf dans le vestiaire.\nOn prend et on remercie."
