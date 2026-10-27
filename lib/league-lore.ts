@@ -481,13 +481,10 @@ export function getScorelineLoreCaption(
   const grAway = ak === "golden_roosters"
   let extra: string | null = null
   if (grHome || grAway) {
-    const grWon = grHome ? homeScore > awayScore : awayScore > homeScore
     const grLost = grHome ? homeScore < awayScore : awayScore < homeScore
-    if (grWon) {
-      extra = "La Mafia Rolandèse valide ce résultat."
-    } else if (grLost) {
+    if (grLost) {
       extra = "Anomalie rare : la Mafia Rolandèse a tremblé ce soir-là."
-    } else {
+    } else if (homeScore === awayScore) {
       extra = "La Mafia Rolandèse doit partager les points — scénario inhabituel."
     }
   }

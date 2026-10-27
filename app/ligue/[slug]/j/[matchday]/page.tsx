@@ -13,7 +13,6 @@ import { buildAutomaticMatchdaySummary } from "@/lib/matchday-episode-summary"
 import {
   getLoreForMatch,
   getScorelineLoreCaption,
-  goldenRoostersWonAny,
 } from "@/lib/league-lore"
 import {
   buildMastheadHeadline,
@@ -273,16 +272,6 @@ export default async function MatchdayEpisodePage({ params, searchParams }: Page
     return "text-zinc-100"
   }
 
-  const loreScoreRows = matchesForMatchday
-    .filter((m) => m.home_score != null && m.away_score != null)
-    .map((m) => ({
-      homeName: labelTeamId(managers, m.home_team_id),
-      awayName: labelTeamId(managers, m.away_team_id),
-      homeScore: m.home_score!,
-      awayScore: m.away_score!,
-    }))
-  const mafiaTicker = goldenRoostersWonAny(loreScoreRows)
-
   const perMatchLore = matchesForMatchday
     .map((m) => {
       const homeL = labelTeamId(managers, m.home_team_id)
@@ -381,18 +370,6 @@ export default async function MatchdayEpisodePage({ params, searchParams }: Page
 
         {data.matchDataStatus === "ready" && matchesForMatchday.length > 0 ? (
           <>
-            {mafiaTicker ? (
-              <div
-                className="mb-5 flex min-h-12 w-full items-center justify-center border border-[#E8000D]/30 bg-[#E8000D] px-2 text-center"
-                role="status"
-                aria-live="polite"
-              >
-                <p className="text-balance break-words px-2 text-xs font-black uppercase tracking-wide text-white sm:text-sm">
-                  🚨 LA MAFIA ROLANDÈSE VALIDE — JOURNÉE {matchdayNumber}
-                </p>
-              </div>
-            ) : null}
-
             {/* 2. Scores */}
             <section className="space-y-3 pb-10" aria-labelledby="scores-heading">
               <SectionKicker id="scores-heading">Les scores</SectionKicker>
