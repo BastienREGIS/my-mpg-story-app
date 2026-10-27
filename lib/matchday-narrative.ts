@@ -25,6 +25,7 @@ export function formatBonusTypeLabel(bonusType: string): string {
     valise_nanard: "VALISE À NANARD",
     mcdo_plus: "MCDO+",
     capitaine: "CAPITAINE",
+    coaching: "COACHING",
   }
   const k = bonusType.trim().toLowerCase()
   return m[k] ?? bonusType.trim().toUpperCase()
@@ -42,7 +43,7 @@ function tieBreakerMs(createdAt: string | null | undefined): number {
 function editorialSortTier(outcome: string): number {
   const o = outcome.trim().toLowerCase()
   if (o === "mirror_genius") return 1
-  if (o === "win") return 2
+  if (o === "win" || o === "coaching_winning") return 2
   if (o === "mirror_draw") return 3
   return 4
 }

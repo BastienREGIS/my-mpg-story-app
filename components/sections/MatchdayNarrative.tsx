@@ -59,6 +59,7 @@ function verdictFromHighlightEntry(narrative: string, bonusTypeLabel: string): V
     "ça ne passe pas",
     "c'est du grand n'importe quoi",
     "il a sorti la valise pour rien",
+    "la loose totale",
     "la valise est sortie, mais le but adverse reste",
     "looser !",
     "tonton pat' méritait mieux",
@@ -69,6 +70,7 @@ function verdictFromHighlightEntry(narrative: string, bonusTypeLabel: string): V
   if (looserSnippets.some((s) => t.includes(s))) return "looser"
 
   const genieSnippets = [
+    "coaching gagnant !",
     "zahia a tout donné",
     "vilain, vicieux, efficace",
     "un petit coup de pouce numérique",

@@ -77,6 +77,9 @@ export function getBonusNarrative(
     } else if (o === "mirror_genius") {
       raw =
         "Po po po. Il retourne le \"bonus\" de son adversaire comme un grand.\nCoup de maître, 3 points volés à son adversaire.\nQuel génie !"
+    } else if (o === "mirror_loss") {
+      raw =
+        "Le miroir a bien renvoyé le bonus dans la figure de l’adversaire.\nMais ses chèvres ont quand même trouvé le moyen de perdre.\nRetour à l’envoyeur, défaite à l’arrivée. Looser !"
     } else if (o === "mirror_draw") {
       raw =
         "Le miroir sauve un point in extremis.\nUn grand ouf dans le vestiaire.\nOn prend et on remercie."
@@ -93,6 +96,9 @@ export function getBonusNarrative(
     if (o === "valise_decisive") {
       raw =
         "La valise sort au bon moment et change tout.\nLe but annulé fait toute la différence.\n3 points volés, 5M bien investis."
+    } else if (o === "valise_loss") {
+      raw =
+        "Un but annulé, un bonus cramé, 5M envolés… et la défaite quand même.\n[coachName] a payé pour perdre.\nLa loose totale."
     } else if (o === "valise_win_anyway") {
       raw =
         "La valise était peut-être superflue,\nmais une victoire reste une victoire.\n5M dépensés pour le style. On ne va pas se plaindre."
@@ -110,6 +116,14 @@ export function getBonusNarrative(
     } else if (o === "loss_or_draw") {
       raw =
         "Le McDo+ n'a pas suffi à nourrir\nces chèvres affamées de victoire.\nMême avec le boost, rien."
+    }
+  } else if (b === "coaching") {
+    if (o === "coaching_winning") {
+      raw =
+        "Coaching gagnant !\n[coachName] fait entrer un joueur et le remplaçant claque un but.\nLe banc avait la solution. Quel flair !"
+    } else if (o === "coaching_losing") {
+      raw =
+        "Coaching perdant !\n[coachName] sort un joueur qui avait marqué.\nLe but reste sur le banc, les regrets sur le terrain. Looser !"
     }
   } else if (b === "capitaine") {
     if (o === "win") {

@@ -104,12 +104,13 @@ async function upsertMatch(
 }
 
 const STANDARD_BONUS_OUTCOMES = new Set(["win", "loss_or_draw"])
-const MIROIR_OUTCOMES = new Set(["mirror_wasted", "mirror_genius", "mirror_draw"])
-const VALISE_OUTCOMES = new Set(["valise_decisive", "valise_win_anyway", "no_goal_but_win", "no_goal_to_cancel"])
+const MIROIR_OUTCOMES = new Set(["mirror_wasted", "mirror_genius", "mirror_draw", "mirror_loss"])
+const VALISE_OUTCOMES = new Set(["valise_decisive", "valise_loss", "valise_win_anyway", "no_goal_but_win", "no_goal_to_cancel"])
 
 function isValidBonusOutcome(bonusType: string, outcome: string): boolean {
   const t = bonusType.toLowerCase()
   const o = outcome.toLowerCase()
+  if (t === "coaching") return new Set(["coaching_winning", "coaching_losing"]).has(o)
   if (t === "miroir") return MIROIR_OUTCOMES.has(o)
   if (t === "valise_nanard") return VALISE_OUTCOMES.has(o)
   return STANDARD_BONUS_OUTCOMES.has(o)

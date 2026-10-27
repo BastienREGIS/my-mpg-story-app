@@ -39,9 +39,10 @@ const BONUS_TYPE_OPTIONS: { value: string; label: string }[] = [
   { value: "valise_nanard", label: "Valise à Nanard" },
   { value: "mcdo_plus", label: "McDo+" },
   { value: "capitaine", label: "Capitaine" },
+  { value: "coaching", label: "Coaching" },
 ]
 
-/** Types dont le résultat est déduit des buts (Miroir et Valise à Nanard = manuels). */
+/** Types dont le résultat est déduit des buts (Miroir, Valise à Nanard et Coaching = manuels). */
 const AUTO_OUTCOME_TYPES = new Set([
   "zahia",
   "suarez",
@@ -205,6 +206,7 @@ function MirrorOutcomeSelect({
         <option value="mirror_wasted">Miroir inutile</option>
         <option value="mirror_genius">Miroir génie</option>
         <option value="mirror_draw">Miroir nul</option>
+        <option value="mirror_loss">Bonus retourné mais défaite quand même</option>
       </select>
     </div>
   )
@@ -234,6 +236,7 @@ function ValiseNanardOutcomeSelect({
       >
         <option value="">— Choisir —</option>
         <option value="valise_decisive">But annulé et décisif (sans ça j'aurais perdu)</option>
+        <option value="valise_loss">But annulé + défaite</option>
         <option value="valise_win_anyway">But annulé mais victoire assurée de toute façon</option>
         <option value="no_goal_but_win">Pas de but à annuler mais victoire quand même</option>
         <option value="no_goal_to_cancel">Pas de but à annuler + défaite</option>
@@ -284,6 +287,27 @@ function BonusOutcomeBlock({
           value={mirrorOutcome}
           onChange={onMirrorOutcomeChange}
         />
+      </div>
+    )
+  }
+
+  if (bt === "coaching") {
+    return (
+      <div className="border-l-2 border-muted/80 pl-3 sm:ml-[calc(8rem+0.75rem)]">
+        <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+          <label htmlFor={name} className="text-sm text-muted-foreground sm:mt-2 sm:w-32 sm:shrink-0">Résultat</label>
+          <select
+            id={name}
+            name={name}
+            className={`${selectClassName} sm:flex-1`}
+            value={mirrorOutcome}
+            onChange={(e) => onMirrorOutcomeChange(e.target.value)}
+          >
+            <option value="">— Choisir —</option>
+            <option value="coaching_winning">Coaching gagnant : le joueur entré a marqué</option>
+            <option value="coaching_losing">Coaching perdant : le joueur sorti avait marqué</option>
+          </select>
+        </div>
       </div>
     )
   }
